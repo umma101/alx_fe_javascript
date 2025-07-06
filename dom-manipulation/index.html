@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Quote Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Dynamic Quote Generator</h1>
+
+  <input type="text" id="quote-input" placeholder="Enter a quote">
+  <button onclick="addQuote()">Add Quote</button>
+
+  <div id="conflict-notification" style="display:none; color: red; margin-top: 10px;">
+    ⚠️ Server updated the quotes. <button onclick="resolveManually()">View</button>
+  </div>
+
+  <ul id="quote-list"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
