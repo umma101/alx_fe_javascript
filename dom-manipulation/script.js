@@ -1,75 +1,47 @@
- const API_URL = 'https://6868ec46d5933161d70cdea8.mockapi.io/quotes'; // 🔁 Replace this!
+ const quoteDisplay = document.getElementById("quoteDisplay");
+const newQuoteBtn = document.getElementById("newQuote");
+const addQuoteBtn = document.getElementById("addQuote");
+const newQuoteInput = document.getElementById("newQuoteText");
+const newCategoryInput = document.getElementById("newQuoteCategory");
 
-function getLocalQuotes() {
-  return JSON.parse(localStorage.getItem('quotes')) || [];
+// Array of quote objects
+let quotes = [
+  { text: "The only limit is your mind.", category: "Motivation" },
+  { text: "Stay curious, stay learning.", category: "Education" },
+  { text: "Life is what happens when you're busy making other plans.", category: "Life" }
+];
+
+// Show random quote
+function showRandomQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const quote = quotes[randomIndex];
+
+  quoteDisplay.innerHTML = `
+    <blockquote>
+      "${quote.text}"
+      <footer><em>— ${quote.category}</em></footer>
+    </blockquote>
+  `;
 }
 
-function saveLocalQuotes(quotes) {
-  localStorage.setItem('quotes', JSON.stringify(quotes));
-}
+// Add a new quote
+function addQuote() {
+  const text = newQuoteInput.value.trim();
+  const category = newCategoryInput.value.trim();
 
-function renderQuotes(quotes) {
-  const list = document.getElementById('quote-list');
-  list.innerHTML = '';
-  quotes.forEach(quote => {
-    const li = document.createElement('li');
-    li.textContent = quote.text;
-    list.appendChild(li);
-  });
-}
-
-async function postQuoteToServer(quote) {
-  await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(quote)
-  });
-}
-
-async function fetchQuotesFromServer() {
-  const response = await fetch(API_URL);
-  const data = await response.json();
-  return data;
-}
-
-async function addQuote() {
-  const input = document.getElementById('quote-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  const newQuote = { text };
-  const localQuotes = getLocalQuotes();
-  localQuotes.push(newQuote);
-  saveLocalQuotes(localQuotes);
-  await postQuoteToServer(newQuote);
-
-  input.value = '';
-  renderQuotes(localQuotes);
-}
-
-function showConflictNotification() {
-  const notice = document.getElementById('conflict-notification');
-  notice.style.display = 'block';
-  setTimeout(() => {
-    notice.style.display = 'none';
-  }, 5000);
-}
-
-async function syncQuotes() {
-  const serverQuotes = await fetchQuotesFromServer();
-  const localQuotes = getLocalQuotes();
-
-  const conflict = JSON.stringify(serverQuotes) !== JSON.stringify(localQuotes);
-  if (conflict) {
-    saveLocalQuotes(serverQuotes); // Server wins
-    renderQuotes(serverQuotes);
-    showConflictNotification();
+  if (text && category) {
+    quotes.push({ text, category });
+    newQuoteInput.value = "";
+    newCategoryInput.value = "";
+    alert("Quote added successfully!");
+  } else {
+    alert("Please enter both quote and category.");
   }
 }
 
-window.onload = async () => {
-  renderQuotes(getLocalQuotes());
-  await syncQuotes();
-};
+// Event Listeners
+newQuoteBtn.addEventListener("click", showRandomQuote);
+addQuoteBtn.addEventListener("click", addQuote);
 
-setInterval(syncQuotes, 10000); // Every 10 seconds
+// Display one quote on load
+showRandomQuote();
