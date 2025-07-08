@@ -1,4 +1,4 @@
-// ========== INITIAL QUOTES ==========
+
 let quotes = [];
 const defaultQuotes = [
   { text: "Be yourself; everyone else is already taken.", category: "Inspiration" },
