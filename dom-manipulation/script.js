@@ -146,7 +146,7 @@ async function syncQuotes() {
     quotes = serverQuotes;
     saveQuotes();
     populateCategories();
-    notifyUser("Quotes synced with server!"); // ✅ Corrected message
+    notifyUser("Quotes synced with server!"); 
   }
 }
 
