@@ -6,7 +6,7 @@ const defaultQuotes = [
   { text: "Success is not final, failure is not fatal.", category: "Motivation" }
 ];
 
-// ========== ELEMENT REFERENCES ==========
+
 const quoteDisplay = document.getElementById("quoteDisplay");
 const newQuoteBtn = document.getElementById("newQuote");
 const addQuoteBtn = document.getElementById("addQuote");
@@ -16,7 +16,7 @@ const categoryFilter = document.getElementById("categoryFilter");
 const importFileInput = document.getElementById("importFile");
 const exportJsonBtn = document.getElementById("exportJson");
 
-// ========== STORAGE ==========
+
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
@@ -27,7 +27,7 @@ function loadQuotes() {
   saveQuotes();
 }
 
-// ========== RANDOM QUOTE ==========
+
 function showRandomQuote() {
   const selectedCategory = categoryFilter.value;
   let filteredQuotes = quotes;
@@ -45,7 +45,7 @@ function showRandomQuote() {
   quoteDisplay.textContent = `"${filteredQuotes[randomIndex].text}" — ${filteredQuotes[randomIndex].category}`;
 }
 
-// ========== ADD QUOTE ==========
+
 function addQuote() {
   const text = quoteTextInput.value.trim();
   const category = quoteCategoryInput.value.trim();
@@ -60,7 +60,7 @@ function addQuote() {
   }
 }
 
-// ========== POPULATE CATEGORIES ==========
+
 function populateCategories() {
   const categories = [...new Set(quotes.map(q => q.category))];
   categoryFilter.innerHTML = `<option value="all">All Categories</option>`;
@@ -75,13 +75,13 @@ function populateCategories() {
   if (savedCategory) categoryFilter.value = savedCategory;
 }
 
-// ========== FILTER QUOTES ==========
+
 function filterQuotes() {
   localStorage.setItem("selectedCategory", categoryFilter.value);
   showRandomQuote();
 }
 
-// ========== EXPORT JSON ==========
+
 function exportToJson() {
   const blob = new Blob([JSON.stringify(quotes)], { type: "application/json" });
   const link = document.createElement("a");
@@ -90,7 +90,7 @@ function exportToJson() {
   link.click();
 }
 
-// ========== IMPORT JSON ==========
+
 function importFromJsonFile(event) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -103,7 +103,7 @@ function importFromJsonFile(event) {
   reader.readAsText(event.target.files[0]);
 }
 
-// ========== SERVER SYNC ==========
+
 function fetchQuotesFromServer() {
   return fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
     .then(res => res.json())
@@ -122,7 +122,7 @@ function postQuoteToServer(quote) {
   }).then(res => res.json());
 }
 
-// ========== CONFLICT RESOLUTION + NOTIFY ==========
+
 function notifyUser(message) {
   let notice = document.getElementById("notification");
   if (!notice) {
@@ -146,19 +146,20 @@ async function syncQuotes() {
     quotes = serverQuotes;
     saveQuotes();
     populateCategories();
-    notifyUser("Quotes synced with server (conflict resolved)");
+    notifyUser("Quotes synced with server!"); // ✅ Corrected message
   }
 }
 
-// ========== EVENT LISTENERS ==========
+
+
 newQuoteBtn.addEventListener("click", showRandomQuote);
 addQuoteBtn.addEventListener("click", addQuote);
 exportJsonBtn.addEventListener("click", exportToJson);
 importFileInput.addEventListener("change", importFromJsonFile);
 
-// ========== INITIALIZE ==========
+
 loadQuotes();
 populateCategories();
 showRandomQuote();
 syncQuotes();
-setInterval(syncQuotes, 10000); // sync every 10 seconds
+setInterval(syncQuotes, 10000); 
